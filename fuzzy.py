@@ -1,11 +1,12 @@
 def fuzzify(raw_rgb):
-	# TODO
-	return raw_rgb
+	# normalizacja z rozciagnieciem histogramu 
+	rgbmin = raw_rgb.min()
+	shifted = raw_rgb - rgbmin
+	return shifted.astype(float) / float(raw_rgb.max() - rgbmin)
 
 def defuzzify(membership, original_rgb):
 	# TODO
-	return original_rgb
+	return membership
 
 def membership_pass(membership):
-	# TODO
 	pass
