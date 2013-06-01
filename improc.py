@@ -11,7 +11,7 @@ from fuzzy import fuzzify, membership_pass, defuzzify
 def process_image(input_path, output_path, pass_count = 1):
 	raw_rgb = misc.imread(input_path)
 	membership = fuzzify(raw_rgb)
-	for pass_num in xrange(1, pass_count):
+	for pass_num in xrange(1, pass_count + 1):
 		membership = membership_pass(membership)
 	result_rgb = defuzzify(membership, raw_rgb)
 	misc.imsave(output_path, result_rgb)
