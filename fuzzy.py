@@ -1,11 +1,22 @@
 import numpy
 from scipy import ndimage
 
+smooth_mx = numpy.array([
+	[0,    0.25, 0   ],
+	[0.25, 0,    0.25],
+	[0,    0.25, 0   ]
+])
+
 def fuzzify(raw_rgb):
 	# normalizacja z rozciagnieciem histogramu 
 	rgbmin = raw_rgb.min()
 	shifted = raw_rgb - rgbmin
-	return shifted.astype(float) / float(raw_rgb.max() - rgbmin)
+	normalized = shifted.astype(float) / float(raw_rgb.max() - rgbmin)
+	if normalized.ndim == 3:
+		# konwertuj macierz wektorow RGB na macierz poziomow szarosci
+		return normalized.sum(axis = 2) / 3.0
+	else:
+		return normalized
 
 def defuzzify(membership, original_rgb):
 	# TODO
@@ -13,7 +24,7 @@ def defuzzify(membership, original_rgb):
 
 def membership_pass(membership):
 	membership = intensify(membership)
-	membership = ndimage.gaussian_filter(membership, 1)
+	membership = ndimage.convolve(membership, smooth_mx)
 	return intensify(membership)
 
 def intensify(membership):
