@@ -8,7 +8,7 @@ smooth_mx = numpy.array([
 ])
 
 def fuzzify(raw_rgb):
-	'''Fuzyfikuje macierz wektorow RGB'''
+	'''Fuzyfikuje macierz wektorow RGB lub 8-bitowych odcieni szarosci'''
 	# normalizacja z rozciagnieciem histogramu 
 	rgbmin = raw_rgb.min()
 	shifted = raw_rgb - rgbmin
@@ -20,9 +20,8 @@ def fuzzify(raw_rgb):
 		return normalized
 
 def defuzzify(membership, original_rgb):
-	'''Odtwarza macierz RGB'''
-	# TODO
-	return membership
+	'''Odtwarza macierz 8-bitowych odcieni szarosci'''
+	return (membership * 255).astype(numpy.uint8)
 
 def membership_pass(membership):
 	'''Modyfikuje wartosci przynaleznosci wedlug algorytmu ulepszania obrazu'''
