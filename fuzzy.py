@@ -26,13 +26,14 @@ def defuzzify(membership, original_rgb):
     return (membership * 255).astype(numpy.uint8)
 
 
-def membership_pass(membership, intensify_passes=1, threshold=0.5, power=2):
+def membership_pass(membership, intensify_passes=1, convolve=True, second_intensify_passes=1, threshold=0.5, power=2):
     """Modyfikuje wartosci przynaleznosci wedlug algorytmu ulepszania obrazu"""
-    # membership = intensify(membership)
-    # membership = ndimage.convolve(membership, smooth_mx)
     for i in xrange(1, intensify_passes + 1):
         membership = intensify(membership, threshold, power)
+    if convolve:
         membership = ndimage.convolve(membership, smooth_mx)
+        for i in xrange(1, second_intensify_passes + 1):
+            membership = intensify(membership, threshold, power)
     return membership
 
 
@@ -41,4 +42,3 @@ def intensify(membership, threshold, power):
     res[membership <= threshold] = (1 / threshold) * membership[membership <= threshold] ** power
     res[membership > threshold] = 1 - (1 / threshold) * (1.0 - membership[membership > threshold]) ** power
     return res
-

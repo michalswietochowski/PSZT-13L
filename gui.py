@@ -7,7 +7,7 @@ import pylab
 import numpy as np
 import matplotlib.cm as cm
 from Tkinter import Tk, BOTH
-from ttk import Frame, Button, Label, LabeledScale
+from ttk import Frame, Button, Label, LabeledScale, Checkbutton
 from PIL import Image, ImageTk
 from random import randint
 from improc import process_image
@@ -26,10 +26,12 @@ class AppGui(Frame):
                 break
         mem = int(self.membershipPassScale.scale.get())
         ins = int(self.intensifyPassScale.scale.get())
+        con = self.convolveCheckbutton.instate(['selected'])
+        in2 = int(self.secondIntensifyPassScale.scale.get())
         thr = float(int(self.thresholdScale.scale.get())) / 10
         pow = int(self.powerScale.scale.get())
 
-        process_image(self.path, tmpPath, mem, ins, thr, pow)
+        process_image(self.path, tmpPath, mem, ins, con, in2, thr, pow)
 
         f = pylab.figure()
         for n, fname in enumerate((tmpPath, self.path)):
@@ -37,7 +39,12 @@ class AppGui(Frame):
             arr = np.asarray(image)
             f.add_subplot(1, 2, n)
             pylab.imshow(arr, cmap=cm.Greys_r)
-        pylab.title("membership passes=%d, intensify passes=%d, threshold=%0.1f, power=%d" % (mem, ins, thr, pow))
+        if con:
+            pylab.title("membership passes=%d, 1st intensify passes=%d, convolve=Yes, 2nd intensify passes=%d, "
+                        "threshold=%0.1f, power=%d" % (mem, ins, in2, thr, pow))
+        else:
+            pylab.title("membership passes=%d, 1st intensify passes=%d, convolve=No, "
+                        "threshold=%0.1f, power=%d" % (mem, ins, thr, pow))
         pylab.show()
 
     def open_file(self):
@@ -78,21 +85,32 @@ class AppGui(Frame):
         self.membershipPassScale = LabeledScale(self, from_=1, to=10)
         self.membershipPassScale.place(x=250, y=100)
 
-        intensifyLabel = Label(text="Intensify passes:")
+        intensifyLabel = Label(text="1st intensify passes:")
         intensifyLabel.place(x=50, y=170)
         self.intensifyPassScale = LabeledScale(self, from_=1, to=10)
         self.intensifyPassScale.place(x=250, y=150)
 
+        convolveLabel = Label(text="Convolve:")
+        convolveLabel.place(x=50, y=220)
+        self.convolveCheckbutton = Checkbutton(self)
+        self.convolveCheckbutton.place(x=250, y=220)
+        self.convolveCheckbutton.invoke()
+
+        secondIntensifyLabel = Label(text="2nd intensify passes:")
+        secondIntensifyLabel.place(x=50, y=270)
+        self.secondIntensifyPassScale = LabeledScale(self, from_=1, to=10)
+        self.secondIntensifyPassScale.place(x=250, y=250)
+
         thresholdLabel = Label(text="Threshold:")
-        thresholdLabel.place(x=50, y=220)
+        thresholdLabel.place(x=50, y=320)
         self.thresholdScale = LabeledScale(self, from_=1, to=10)
-        self.thresholdScale.place(x=250, y=200)
+        self.thresholdScale.place(x=250, y=300)
         self.thresholdScale.scale.set(5)
 
         powerLabel = Label(text="Power:")
-        powerLabel.place(x=50, y=270)
+        powerLabel.place(x=50, y=370)
         self.powerScale = LabeledScale(self, from_=2, to=5)
-        self.powerScale.place(x=250, y=250)
+        self.powerScale.place(x=250, y=350)
 
 
 def main():
