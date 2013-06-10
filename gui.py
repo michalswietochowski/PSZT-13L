@@ -64,14 +64,14 @@ class AppGui(Frame):
         self.parent.geometry("%dx%d+%d+%d" % (w, h, x, y))
 
     def init_ui(self):
-        self.parent.title("Image defuzzifying")
+        self.parent.title("Image enhancement")
         self.pack(fill=BOTH, expand=1)
         self.center_window()
 
         openFileButton = Button(self, text="Choose image", command=self.open_file)
         openFileButton.place(x=50, y=50)
 
-        self.runButton = Button(self, text="Defuzzify", command=self.run, state="disabled")
+        self.runButton = Button(self, text="Enhance", command=self.run, state="disabled")
         self.runButton.place(x=200, y=50)
 
         membershipLabel = Label(text="Membership passes:")
