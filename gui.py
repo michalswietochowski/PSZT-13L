@@ -27,10 +27,9 @@ class AppGui(Frame):
         mem = int(self.membershipPassScale.scale.get())
         ins = int(self.intensifyPassScale.scale.get())
         thr = float(int(self.thresholdScale.scale.get())) / 10
-        mul = int(self.multiplierScale.scale.get())
         pow = int(self.powerScale.scale.get())
 
-        process_image(self.path, tmpPath, mem, ins, thr, mul, pow)
+        process_image(self.path, tmpPath, mem, ins, thr, pow)
 
         f = pylab.figure()
         for n, fname in enumerate((tmpPath, self.path)):
@@ -38,7 +37,7 @@ class AppGui(Frame):
             arr = np.asarray(image)
             f.add_subplot(1, 2, n)
             pylab.imshow(arr, cmap=cm.Greys_r)
-        pylab.title("membership passes=%d, intensify passes=%d, threshold=%0.1f, multiplier=%d, power=%d" % (mem, ins, thr, mul, pow))
+        pylab.title("membership passes=%d, intensify passes=%d, threshold=%0.1f, power=%d" % (mem, ins, thr, pow))
         pylab.show()
 
     def open_file(self):
@@ -90,15 +89,10 @@ class AppGui(Frame):
         self.thresholdScale.place(x=250, y=200)
         self.thresholdScale.scale.set(5)
 
-        multiplierLabel = Label(text="Multiplier:")
-        multiplierLabel.place(x=50, y=270)
-        self.multiplierScale = LabeledScale(self, from_=2, to=5)
-        self.multiplierScale.place(x=250, y=250)
-
         powerLabel = Label(text="Power:")
-        powerLabel.place(x=50, y=320)
+        powerLabel.place(x=50, y=270)
         self.powerScale = LabeledScale(self, from_=2, to=5)
-        self.powerScale.place(x=250, y=300)
+        self.powerScale.place(x=250, y=250)
 
 
 def main():
